@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hello_rectangle/second.dart';
+import 'package:flutter/services.dart';
 
 void main() => runApp(MyApp());
 
@@ -10,8 +10,14 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Web Training',
       theme: ThemeData(
         primarySwatch: Colors.blue,
+        fontFamily: "Noto Sans JP",
       ),
-      home: MyHomePage(),
+      home: DefaultTextStyle.merge(
+          style: TextStyle(
+              height: 1.5
+          ),
+          child: MyHomePage()
+      ),
     );
   }
 }
@@ -22,26 +28,24 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  late TextEditingController nameController; ////////////追加！
-  late TextEditingController passwordController; ////////////追加！
 
-  String name = "";
-  String password = "";
+  String genderAns = "男性";
+  bool haveDog = false;
+  late double feel;
 
-  @override ///////////////////////////////////////////追加！
+  late TextEditingController favoriteNumberContoroller;
+
+  @override
   void initState() {
     super.initState();
-
-    nameController = new TextEditingController();
-    passwordController = new TextEditingController();
+    favoriteNumberContoroller = new TextEditingController(text: "334");
+    feel = 0.0;
 
   }
 
   @override
-  void dispose() {////////////////////////////////////////追加！
-    nameController.dispose();
-    passwordController.dispose();
-
+  void dispose() {
+    favoriteNumberContoroller.dispose();
     super.dispose();
   }
 
@@ -49,75 +53,104 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
         body: Center(
-          child: Card(
+          child: SingleChildScrollView(
             child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                Image.asset(
-                  "image/pien.jpg",
-                  width: 100,
-                ),
-                Icon(
-                  Icons.favorite,
-                  color: Colors.green,
-                ),
+              children: [
                 Container(
-                  width: 200,
-                  child: TextField(
-                    controller: nameController,
-                    onChanged: (text){
-                      setState(() {
-                        name = text;
-                      });
-                    },
+                  width: 800.0,
+                  height: 500.0,
+                  margin: EdgeInsets.all(16.0),
+                  color: Colors.red,
+                  child: Center(
+                    child: Text(
+                      "運勢占い",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 50.0
+                      ),
+                    ),
                   ),
                 ),
                 Text(
-                    "ようこそ、$nameさん",
-                    style: TextStyle(
-                        fontSize: 16.0,
-                        color: Colors.grey
-                    )
-                ),
-                Container(
-                  width: 200,
-                  child: TextField(
-                    controller: passwordController,
-                    onChanged: (text){
-                      setState(() {
-                        password = text;
-                      });
-                    },
+                  "質問1.　性別を教えてください",
+                  style: TextStyle(
+                    fontSize: 30.0,
                   ),
                 ),
-                Text(
-                    "パスワードを入力",
-                    style: TextStyle(
-                        fontSize: 16.0,
-                        color: Colors.grey
-                    )
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text("男性"),
+                    Radio(
+                      value: "男性",
+                      groupValue: genderAns,
+                      onChanged: (value) {
+                        setState(() {
+                          genderAns = value.toString();
+                        });
+                      },
+                    ),
+                    Text("女性"),
+                    Radio(
+                      value: "女性",
+                      groupValue: genderAns,
+                      onChanged: (value) {
+                        setState(() {
+                          genderAns = value.toString();
+                        });
+                      }
+                    ),
+                  ],
                 ),
-                // ignore: deprecated_member_use
-                FlatButton(
-                  onPressed: () {
-                    if(name == password) {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) {
-                            return SecondPage();
-                          },
-                        ),
-                      );
-                    }
-
-                    else{
-                      print("パスワードが違います");
-                    }
+                Text(
+                  "Do you have a dog?",
+                  style: TextStyle(
+                        fontSize: 30.0,
+                    ),
+                ),
+                Switch(
+                  value: haveDog,
+                  onChanged: (value){
+                    setState(() {
+                      haveDog = value;
+                    });
                   },
-                  child: Text("ログイン"),
                 ),
-              ],
-            ),
+                Text("question 3. How do you feel now?",
+                  style: TextStyle(
+                    fontSize: 30.0,
+                  )
+                ),
+                Text("${(feel * 100.0).round()}"),
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text("bad"),
+                    Slider(
+                      value: feel,
+                      onChanged: (value) {
+                        setState(() {
+                          feel = value;
+                        });
+                      },
+                    ),
+                    Text("good"),
+                  ],
+                ),
+                Text("question 4. What's your favorite color?",
+                  style: TextStyle(
+                    fontSize: 30.0,
+                  ),
+                ),
+                Container(
+                  width: 400.0,
+                  child: TextField(
+                    controller: favoriteNumberContoroller,
+                    textAlign: TextAlign.center,
+                  )
+                )
+              ]
+            )
           )
         )
     );

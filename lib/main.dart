@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:hello_rectangle/result.dart';
 
 void main() => runApp(MyApp());
 
@@ -33,19 +33,19 @@ class _MyHomePageState extends State<MyHomePage> {
   bool haveDog = false;
   late double feel;
 
-  late TextEditingController favoriteNumberContoroller;
+  late TextEditingController favoriteNumberController;
 
   @override
   void initState() {
     super.initState();
-    favoriteNumberContoroller = new TextEditingController(text: "334");
+    favoriteNumberController = new TextEditingController(text: "334");
     feel = 0.0;
 
   }
 
   @override
   void dispose() {
-    favoriteNumberContoroller.dispose();
+    favoriteNumberController.dispose();
     super.dispose();
   }
 
@@ -145,10 +145,44 @@ class _MyHomePageState extends State<MyHomePage> {
                 Container(
                   width: 400.0,
                   child: TextField(
-                    controller: favoriteNumberContoroller,
+                    controller: favoriteNumberController,
                     textAlign: TextAlign.center,
                   )
-                )
+                ),
+                Text("question5. please check it below",
+                  style: TextStyle(
+                    fontSize: 30.0,
+
+                  )
+                ),
+                Checkbox(
+                  value: haveDog,
+                  onChanged: (value){
+                    setState(() {
+                      haveDog = value!;
+                    });
+                  }
+                ),
+                // ignore: deprecated_member_use
+                RaisedButton(
+                  onPressed: (){
+                    Navigator.of(context).push(
+                        MaterialPageRoute(
+                            builder: (context) {
+                              return ResultPage(genderAns, haveDog, feel, favoriteNumberController.text);
+                            }
+                        )
+                    );
+                  },
+                  color: Colors.red,
+                  child: Text(
+                    "watch the result.",
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold
+                    ),
+                  ),
+                ),
               ]
             )
           )
